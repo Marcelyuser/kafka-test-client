@@ -1,0 +1,18 @@
+# Java
+*.class
+*.jar
+
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+/logs/
+
+# IDE
+*.iml
+.idea/
+*.log
+*.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store

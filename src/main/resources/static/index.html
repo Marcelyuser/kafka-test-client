@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Kafka Test Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans text-gray-800">
+    <div class="max-w-2xl mx-auto p-6 mt-10 bg-white shadow-lg rounded-xl">
+        <h1 class="text-2xl font-bold mb-6 text-center text-indigo-600">Kafka Test Client</h1>
+
+        <!-- Send Message -->
+        <section class="mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">📤 Send Kafka Message</h2>
+            <form id="sendForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium">Kafka Server (IP:Port)</label>
+                    <input type="text" name="bootstrapServers" required class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Security Enabled (true/false)</label>
+                    <input type="text" name="securityEnabled" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">SASL Mechanism</label>
+                    <input type="text" name="saslMechanism" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">SASL JAAS Config</label>
+                    <input type="text" name="saslJaasConfig" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">SSL TrustStore Location</label>
+                    <input type="text" name="sslTrustStoreLocation" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">SSL TrustStore Password</label>
+                    <input type="password" name="sslTrustStorePassword" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Topic</label>
+                    <input type="text" name="topic" required class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Message</label>
+                    <input type="text" name="message" required class="w-full p-2 border rounded" />
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">Send Message</button>
+            </form>
+            <div id="sendResult" class="mt-4 text-sm bg-gray-100 p-3 rounded text-gray-700 whitespace-pre-wrap"></div>
+        </section>
+
+        <!-- Receive Message -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">📥 Start Kafka Consumer</h2>
+            <form id="receiveForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium">Kafka Server (IP:Port)</label>
+                    <input type="text" name="bootstrapServers" required class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Security Enabled (true/false)</label>
+                    <input type="text" name="securityEnabled" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">SASL Mechanism</label>
+                    <input type="text" name="saslMechanism" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">SASL JAAS Config</label>
+                    <input type="text" name="saslJaasConfig" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">SSL TrustStore Location</label>
+                    <input type="text" name="sslTrustStoreLocation" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">SSL TrustStore Password</label>
+                    <input type="password" name="sslTrustStorePassword" class="w-full p-2 border rounded" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Topic</label>
+                    <input type="text" name="topic" required class="w-full p-2 border rounded" />
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Start Consumer</button>
+            </form>
+            <div id="receiveResult" class="mt-4 text-sm bg-gray-100 p-3 rounded text-gray-700 whitespace-pre-wrap"></div>
+        </section>
+    </div>
+
+    <script>
+        document.getElementById('sendForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const params = new URLSearchParams(formData).toString();
+            const res = await fetch('/kafka/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: params
+            });
+            const text = await res.text();
+            document.getElementById('sendResult').innerText = text;
+        });
+
+        document.getElementById('receiveForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const params = new URLSearchParams(formData).toString();
+            const res = await fetch('/kafka/receive', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: params
+            });
+            const text = await res.text();
+            document.getElementById('receiveResult').innerText = text;
+        });
+    </script>
+</body>
+</html>
